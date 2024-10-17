@@ -1,0 +1,30 @@
+.bg-primary-orange{
+    background-color: #F27405;
+}
+
+.bg-primary-gray{
+    background-color: #557284;
+}
+
+.bg-primary-orange2{
+    background-color: #F25835;
+}
+
+.bg-primary-gray{
+    background-color: #F2F2F2;
+}
+
+.bg-primary-black{
+    background-color: #0D0D0D;
+}
+
+nav.navbar-glass{
+    background: transparent;
+
+    backdrop-filter: blur(20px);
+    
+}
+
+.margin-top {
+    margin-top: 80px; /
+}
