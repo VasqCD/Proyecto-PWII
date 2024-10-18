@@ -20,7 +20,6 @@
 
 nav.navbar-glass{
     background: transparent;
-
     backdrop-filter: blur(20px);
     
 }
@@ -29,19 +28,18 @@ nav.navbar-glass{
     margin-top: 80px; /
 }
 
-button..bg-primary-orange2{
-    background-color: #F25835;
-}
 
 .btn-estilo{
+    display: inline-block;
     background-color: #F25835;
     color: white;
     border: none;
     border-radius: 8px;
     width: 100%;
     padding: 6px;
-    font-size: 1.2rem;
     cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 .btn-estilo:hover{

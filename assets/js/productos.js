@@ -18,9 +18,9 @@ document.addEventListener("DOMContentLoaded", function() {
         showSlide(currentIndex);
     };
 
-    // Mostrar la primera diapositiva al cargar la página
+    // mostrar primer foto
     showSlide(currentIndex);
 
-    // Si quieres que el carrusel avance automáticamente cada 5 segundos
+    // para que avance cada 5 segundos
     setInterval(nextSlide, 5000);
 });
