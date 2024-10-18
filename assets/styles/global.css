@@ -28,3 +28,22 @@ nav.navbar-glass{
 .margin-top {
     margin-top: 80px; /
 }
+
+button..bg-primary-orange2{
+    background-color: #F25835;
+}
+
+.btn-estilo{
+    background-color: #F25835;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    padding: 6px;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.btn-estilo:hover{
+    background-color: #F27405;
+}
