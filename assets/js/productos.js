@@ -24,3 +24,21 @@ document.addEventListener("DOMContentLoaded", function() {
     // para que avance cada 5 segundos
     setInterval(nextSlide, 5000);
 });
+
+//filrar productos por categoria 
+function filterProducts(category) {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+window.onload = function() {
+    setTimeout(function() {
+        alert("¡Promoción del mes! 10% de descuento en todos los pedidos mayores a L.500.");
+    }, 5000);
+};

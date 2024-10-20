@@ -45,3 +45,7 @@ nav.navbar-glass{
 .btn-estilo:hover{
     background-color: #F27405;
 }
+
+.btn-spacing{
+    margin-left: 20px;
+}
