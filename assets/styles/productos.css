@@ -1,4 +1,4 @@
-/* Reiniciar algunos estilos globales */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -6,7 +6,6 @@ body {
   background-color: #f8f8f8;
 }
 
-/* Asegurarse de que el contenido ocupe el 100% del ancho */
 .cards-section {
   width: 100%;
   padding: 20px;
@@ -14,14 +13,13 @@ body {
   justify-content: center;
 }
 
-/* Usamos grid para organizar las cards */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusta el número de columnas automáticamente */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
   gap: 20px;
   width: 100%;
-  max-width: 1200px; /* Limitar el ancho total */
-  padding: 0 20px; /* Añadir algo de padding para no pegar las cards a los lados */
+  max-width: 1200px;
+  padding: 0 20px; 
   box-sizing: border-box;
 }
 
@@ -42,7 +40,7 @@ body {
 .card img {
   width: 100%;
   height: 200px;
-  object-fit: cover; /* Asegura que la imagen no se deforme */
+  object-fit: cover; 
 }
 
 .card-content {
@@ -68,7 +66,7 @@ body {
   margin: 10px 0;
 }
 
-/* Estilos de botones */
+
 .btn-estilo {
   background-color: #cac26d;
   color: white;
