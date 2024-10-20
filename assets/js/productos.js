@@ -40,5 +40,5 @@ function filterProducts(category) {
 window.onload = function() {
     setTimeout(function() {
         alert("¡Promoción del mes! 10% de descuento en todos los pedidos mayores a L.500.");
-    }, 5000);
+    }, 4000);
 };
