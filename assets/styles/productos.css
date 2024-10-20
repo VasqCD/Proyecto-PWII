@@ -1,201 +1,173 @@
-section.galeria1{
-    display: flex;
-
-    height: 430px;
+/* Reiniciar algunos estilos globales */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
 }
 
-section img{
-    width: 0px;
-    flex-grow: 1;
-    object-fit: cover;
-    opacity: .8;
-    transition: 0.5s;
+/* Asegurarse de que el contenido ocupe el 100% del ancho */
+.cards-section {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-section img:hover{
-    cursor: crosshair;
-    width: 350px;
-    opacity: 1;
-    filter: contrast(120%);
-}
-
-
-/* estilo del carrusel*/
-.custom-carousel {
-    position: relative;
-    width: 100%;
-    margin: auto;
-    overflow: hidden;
-    height: 600px;
-  }
-  
-  .carousel-slide {
-    display: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.5s ease-in-out;
-  }
-  
-  .carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .carousel-caption {
-    position: absolute;
-    bottom: 20px;
-    left: 50px;
-    max-width: 350px;
-    background: rgba(0, 0, 0, 0.603);
-    padding: 20px;
-    color: #fff;
-    border-radius: 10px;
-  }
-  
-  .btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    margin-right: 10px;
-  }
-  
-  .btn-outline {
-    display: inline-block;
-    padding: 10px 20px;
-    border: 1px solid #007bff;
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .prev-btn, .next-btn {
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    background-color: rgba(0,0,0,0.5);
-    cursor: pointer;
-    border: none;
-  }
-  
-  .prev-btn {
-    left: 0;
-  }
-  
-  .next-btn {
-    right: 0;
-  }
-
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
+/* Usamos grid para organizar las cards */
 .cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    width: 100%;
-    max-width: 1200px;
-    box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusta el número de columnas automáticamente */
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px; /* Limitar el ancho total */
+  padding: 0 20px; /* Añadir algo de padding para no pegar las cards a los lados */
+  box-sizing: border-box;
 }
 
+/* Estilo para las cards */
 .card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Asegura que la imagen no se deforme */
 }
 
 .card-content {
-    padding: 15px;
+  padding: 15px;
 }
 
 .card-content h3 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #333;
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .card-content p {
-    margin: 10px 0;
-    font-size: 0.95rem;
-    color: #666;
+  margin: 10px 0;
+  font-size: 0.95rem;
+  color: #666;
 }
 
 .price {
-    display: block;
-    font-size: 1.2rem;
-    color: #007bff;
-    margin: 10px 0;
+  display: block;
+  font-size: 1.2rem;
+  color: #007bff;
+  margin: 10px 0;
+}
+
+/* Estilos de botones */
+.btn-estilo {
+  background-color: #cac26d;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-estilo:hover {
+  background-color: #0056b3;
+}
+
+/* Estilo del carrusel */
+.custom-carousel {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  height: 600px;
+}
+
+.carousel-slide {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 50px;
+  max-width: 350px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  color: #fff;
+  border-radius: 10px;
 }
 
 .btn {
-    display: inline-block;
-    width: 100%;
-    padding: 10px;
-    text-align: center;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #c2ae68;
+  color: white;
+  text-decoration: none;
+  margin-right: 10px;
 }
 
-.btn:hover {
-    background-color: #0056b3;
+.prev-btn, .next-btn {
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  border: none;
 }
 
+.prev-btn {
+  left: 0;
+}
 
-/* imagenes en galeria dinamica */
+.next-btn {
+  right: 0;
+}
 
-
+/* Estilo de la galería */
 .galeria1 {
-    display: flex;
-    height: 430px;
+  display: flex;
+  justify-content: center;
+  height: 430px;
+  gap: 10px;
 }
 
-.galeria1 .galeria-img {
-    width: 1%; 
-    flex-grow: 1;
-    object-fit: cover;
-    opacity: .8;
-    transition: width 0.5s, opacity 0.5s; 
+.galeria-img {
+  width: 1%;
+  flex-grow: 1;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: width 0.5s, opacity 0.5s;
 }
 
-.galeria1 .galeria-img:hover {
-    cursor: crosshair;
-    width: 450px;
-    opacity: 1;
-    filter: contrast(120%);
+.galeria-img:hover {
+  cursor: crosshair;
+  width: 450px;
+  opacity: 1;
+  filter: contrast(120%);
 }
-    
