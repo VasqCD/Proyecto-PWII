@@ -1,0 +1,29 @@
+meta {
+  name: Actualizar un producto
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 672dae68ae54fcf408394428
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk4NGFmODRmMmY2OGQ5NDAwNWMyMiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ2YXNxM0B0ZXN0LmVzIiwiaWF0IjoxNzMxODIyODY5LCJleHAiOjE3MzE5MDkyNjl9.LSOeAryGAJlksJX2wh8uLg0T_nj8GXHETtdEd_ZrNHU
+}
+
+body:json {
+  {
+    "nombreProducto": "Chuleta actualizado 1",
+    "descripcionProducto": "Pollo acompañado de papas",
+    "precioProducto": 120,
+    "categoriaProducto": "Almuerzo",
+    "estadoProducto": true
+  }
+}

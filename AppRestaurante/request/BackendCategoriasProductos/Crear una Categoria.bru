@@ -1,0 +1,21 @@
+meta {
+  name: Crear una Categoria
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{URL_LOC}}:{{PORT_DEF}}/categorias
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzdkODUwMTAzZjczNDM1NWEyM2E0ZiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ2YXNxQHRlc3QuZXMiLCJpYXQiOjE3MzE4MTY1NjMsImV4cCI6MTczMTkwMjk2M30.zDQfojtB_0mL5Z8p0gNyZ804vFW1j0KZYnUbUkTDiVI
+}
+
+body:multipart-form {
+  nombreCategoria: Almuerzo
+  descripcionCategoria: variedad de comidas
+  imagen: @file(C:\Users\chris\Downloads\cafeleche.jpg)
+}

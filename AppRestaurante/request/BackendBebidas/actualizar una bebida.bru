@@ -1,0 +1,29 @@
+meta {
+  name: actualizar una bebida
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{URL_LOC}}:{{PORT_DEF}}/bebidas/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 673961c111f49aa923a852fa
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk5MzU0OTMwZmI1M2NiNzE4NmI1NiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ0ZXN0MUB0ZXN0LmVzIiwiblJvbCI6WyI2NzM5N2QxNmE0ZDg4NDRmZDdkYjYxOWEiXSwiaWF0IjoxNzMxODI2NTU0LCJleHAiOjE3MzE5MTI5NTR9.iteqWj4wtp96dI3nZEK-toZYaD6_anZ3YM8fuJ4ydbc
+}
+
+body:json {
+  {
+      "nombreBebida": "Cafe Actualizdo 111",
+      "descripcionBebida": "Delicioso cafe negro Acc",
+      "precioBebida": 25,
+      "categoriaBebida": "Bebidas calientes",
+      "estadoBebida": true
+  }
+}

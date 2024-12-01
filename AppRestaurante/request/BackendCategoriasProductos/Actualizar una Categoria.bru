@@ -1,0 +1,24 @@
+meta {
+  name: Actualizar una Categoria
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{URL_LOC}}:{{PORT_DEF}}/categorias/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 6737a8240aaddfb8d074329e
+}
+
+body:json {
+  {
+    "nombreCategoria": "Postres A eliminar",
+    "descripcionCategoria": "Deliciosos postres para cerrar tu comida.",
+    "estadoCategoria": true,
+    "imagenCategoria": "assets/images/categorias/postres1.jpg"
+  }
+}

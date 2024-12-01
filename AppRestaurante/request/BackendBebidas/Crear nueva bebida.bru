@@ -1,0 +1,25 @@
+meta {
+  name: Crear nueva bebida
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{URL_LOC}}:{{PORT_DEF}}/bebidas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk5MzU0OTMwZmI1M2NiNzE4NmI1NiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ0ZXN0MUB0ZXN0LmVzIiwiblJvbCI6WyI2NzM5N2QxNmE0ZDg4NDRmZDdkYjYxOWEiXSwiaWF0IjoxNzMxODI2NTU0LCJleHAiOjE3MzE5MTI5NTR9.iteqWj4wtp96dI3nZEK-toZYaD6_anZ3YM8fuJ4ydbc
+}
+
+body:json {
+  {
+      "nombreBebida": "Cafe",
+      "descripcionBebida": "Delicioso cafe negro",
+      "precioBebida": 25,
+      "categoriaBebida": "Bebidas calientes",
+      "estadoBebida": true
+  }
+}

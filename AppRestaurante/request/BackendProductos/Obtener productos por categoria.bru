@@ -1,0 +1,19 @@
+meta {
+  name: Obtener productos por categoria
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos/categoria/:nombreCategoria
+  body: none
+  auth: bearer
+}
+
+params:path {
+  nombreCategoria: Postres
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk5MDViMjk4MmU0YWMxNWMzYzM4MyIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJjdmFzcTNAdGVzdC5lcyIsIm5Sb2wiOlsiNjczOTdkMTZhNGQ4ODQ0ZmQ3ZGI2MTlhIl0sImlhdCI6MTczMTgyNTc1NSwiZXhwIjoxNzMxOTEyMTU1fQ.DfdJmAj-sB4p1dd4zmonlfw0-y_XwHXmQJfhSbGs7Yk
+}

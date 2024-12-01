@@ -1,0 +1,19 @@
+meta {
+  name: Subir archivos
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{URL_LOC}}:{{PORT_DEF}}/categorias/upload
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzdkODUwMTAzZjczNDM1NWEyM2E0ZiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ2YXNxQHRlc3QuZXMiLCJpYXQiOjE3MzE4MDczNjAsImV4cCI6MTczMTg5Mzc2MH0.8HnAA70q3E1ok17wfv9AGskqWZ0YVH2W9od0BEabC7M
+}
+
+body:multipart-form {
+  archivo: @file(C:\Users\chris\Downloads\cafeleche.jpg)
+}

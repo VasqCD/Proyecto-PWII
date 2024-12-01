@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="./css/productos.css">
+</head>
+<body>
+    <!--ESTRUCTURA SEMANTICA HTML -->
+
+   <!-- HEADER -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Productos</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <!-- MAIN -->
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Productos</h1>
+                    <a href="productos-formulario.html" class="btn btn-primary">Nuevo Producto</a>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="d-none d-md-table-cell">Id</th>
+                                <th class="d-none d-md-table-cell">Imagen</th>
+                                <th>Nombre</th>
+                                <th class="d-none d-md-table-cell">Descripción</th>
+                                <th>Precio</th>
+                                <th class="d-none d-md-table-cell">Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- PAGINACION -->
+                <div class="col-12">
+                    <nav aria-label="Navegación de productos">
+                        <ul class="pagination justify-content-center" id="paginacion">
+                            <!-- Se llenará dinámicamente -->
+                        </ul>
+                    </nav>
+            </div>
+        </div>
+        
+        <!-- modal -->
+<div class="modal fade" id="detalleProductoModal" tabindex="-1" aria-labelledby="detalleProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detalleProductoModalLabel">Detalle del Producto</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="detalleProductoBody">
+          <!-- Se llenará dinámicamente -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    </main>
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p>&copy; 2024 - Todos los derechos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="js/productos.js"></script>
+</body>
+</html>

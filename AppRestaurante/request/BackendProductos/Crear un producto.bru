@@ -1,0 +1,25 @@
+meta {
+  name: Crear un producto
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk4NGFmODRmMmY2OGQ5NDAwNWMyMiIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJ2YXNxM0B0ZXN0LmVzIiwicm9sZXMiOlsiNjczOTdkMTZhNGQ4ODQ0ZmQ3ZGI2MTlhIl0sImlhdCI6MTczMTgyMzQwNSwiZXhwIjoxNzMxOTA5ODA1fQ.0APC2JuM8XfMU3AVFJr3fBTo5QCpVQf2B0NqPpgSgqQ
+}
+
+body:json {
+  {
+    "nombreProducto": "Pastel 3 leches",
+    "descripcionProducto": "Pollo acompañado de papas",
+    "precioProducto": 120,
+    "categoriaProducto": "Postres",
+    "estadoProducto": true
+  }
+}

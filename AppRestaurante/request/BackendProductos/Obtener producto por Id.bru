@@ -1,0 +1,19 @@
+meta {
+  name: Obtener producto por Id
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 67354f54f651ba277c2560a9
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk5MDViMjk4MmU0YWMxNWMzYzM4MyIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJjdmFzcTNAdGVzdC5lcyIsIm5Sb2wiOlsiNjczOTdkMTZhNGQ4ODQ0ZmQ3ZGI2MTlhIl0sImlhdCI6MTczMTgyNTc1NSwiZXhwIjoxNzMxOTEyMTU1fQ.DfdJmAj-sB4p1dd4zmonlfw0-y_XwHXmQJfhSbGs7Yk
+}

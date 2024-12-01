@@ -1,0 +1,15 @@
+meta {
+  name: Test subir archivos
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos/upload
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  archivo: @file(C:\Users\chris\OneDrive\Imágenes\Invitaciones-de-Dinosaurios-de-cuello-largo-para-Editar-1.pdf)
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Eliminar un producto
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{URL_LOCAL}}:{{PORT_DEFAULT}}/productos/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 67398a3189633e79710eb947
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3Mzk5MDJhMjk4MmU0YWMxNWMzYzM3ZCIsIm5vbWJyZSI6IkNocmlzdGlhbiBWIiwiZW1haWwiOiJjdmFzcTJAdGVzdC5lcyIsIm5Sb2wiOlsiNjczOTdkMTZhNGQ4ODQ0ZmQ3ZGI2MTliIl0sImlhdCI6MTczMTgyNTcwNiwiZXhwIjoxNzMxOTEyMTA2fQ.hCrYbvAbC5bKx6nqnMR_xmYhsZ6CziysKfIL652hLEw
+}
