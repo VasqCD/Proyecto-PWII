@@ -1,0 +1,25 @@
+#sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background-color: var(--bg-primary-gray); /* Usando variable de color definida en global.css */
+}
+
+#sidebar .nav-link {
+    font-size: 1rem; /* Ajustar tamaño de fuente */
+    margin: 10px 0;
+}
+
+#sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+#sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+#sidebar .btn {
+    width: 100%;
+}

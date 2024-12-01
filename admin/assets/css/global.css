@@ -1,0 +1,88 @@
+:root {
+    --bg-primary-gray: #557284;
+    --bg-primary-orange: #F27405;
+    --bg-primary-orange2: #F25835;
+    --bg-primary-black: #0D0D0D;
+}
+
+.bg-primary-gray {
+    background-color: var(--bg-primary-gray);
+}
+
+.bg-primary-orange {
+    background-color: var(--bg-primary-orange);
+}
+
+.bg-primary-orange2 {
+    background-color: var(--bg-primary-orange2);
+}
+
+.bg-primary-black {
+    background-color: var(--bg-primary-black);
+}
+
+.btn-primary-orange {
+    background-color: var(--bg-primary-orange);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: auto; /* Ajustar ancho del botón */
+}
+
+.btn-primary-orange:hover {
+    background-color: var(--bg-primary-orange2);
+}
+
+.custom-main{
+    margin-left: 300px;
+    margin-top: 60px;
+    padding: 20px;
+
+}
+
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-custom thead {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.table-custom th, .table-custom td {
+    padding: 12px 20px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table-custom tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-custom tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-custom th {
+    font-weight: bold;
+    letter-spacing: 0.05rem;
+}
+
+.table-custom td {
+    font-size: 1rem;
+    color: #333;
+}
+
+.table-custom td:first-child {
+    font-weight: bold;
+    color: #007bff;
+}

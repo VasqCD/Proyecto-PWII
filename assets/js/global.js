@@ -1,5 +1,5 @@
 Toastify({
-    text: "Hola! Este sitio web a sido desarrollado por Christian Vasquez", // mensaje
+    text: "Desarrollado por Christian Vasquez y Cristian Maradiaga", // mensaje
     duration: 10000, // milisegundos
     newWindow: true, 
 
