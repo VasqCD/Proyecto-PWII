@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <link href="../assets/css/login.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container d-flex justify-content-center align-items-center auth-container">
+        <div class="row w-100 max-w-4xl">
+            <!-- Formulario de Login -->
+            <div class="col-md-6" id="loginForm">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <img src="../assets/images/logo.png" alt="Logo" class="auth-logo mx-auto d-block" />
+                        <h3 class="text-center">Iniciar Sesión</h3>
+                        <p class="text-center text-muted">
+                            Ingresa tus credenciales para acceder
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <form id="loginFormSubmit">
+                            <div class="form-group mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" name="email" id="loginEmail"
+                                        placeholder="Correo electrónico" required />
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" name="password" id="loginPassword"
+                                        placeholder="Contraseña" required />
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div id="contenedor-error"></div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Bienvenida -->
+            <div class="col-md-6" id="loginMessage">
+                <div class="card h-100 bg-light">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                        <i class="fas fa-dumbbell fa-3x mb-4 text-primary"></i>
+                        <h3>¡Bienvenido de nuevo!</h3>
+                        <p class="text-muted">Nos alegra verte otra vez</p>
+                        <p>
+                            Bienvenido al panel administrativo. Controla, organiza y mejora.
+                        </p>
+                        <div class="mt-4">
+                            <p>¿No tienes una cuenta?</p>
+                            <button class="btn btn-outline-primary" onclick="toggleForms()">
+                                <i class="fas fa-user-plus me-2"></i>Registrarse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje de Registro -->
+            <div class="col-md-6" id="registerMessage" style="display: none">
+                <div class="card h-100 bg-light">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                        <i class="fas fa-running fa-3x mb-4 text-primary"></i>
+                        <h3>¡Únete a nosotros!</h3>
+                        <p class="text-muted">Crea tu cuenta en unos simples pasos</p>
+                        <p>Crea tu cuenta para acceder al panel de administración.</p>
+                        <div class="mt-4">
+                            <p>¿Ya tienes una cuenta?</p>
+                            <button class="btn btn-outline-primary" onclick="toggleForms()">
+                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div class="col-md-6" id="registerForm" style="display: none">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <img src="../assets/images/logo.png" alt="Logo" class="auth-logo mx-auto d-block" />
+                        <h3 class="text-center">Crear Cuenta</h3>
+                        <p class="text-center text-muted">
+                            Completa tus datos para registrarte
+                        </p>
+                    </div>
+                    <div class="card-body">
+                        <form id="registerFormSubmit">
+                            <div class="form-group mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" name="nombre" id="registerNombre"
+                                        placeholder="Nombre completo" required />
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" name="email" id="registerEmail"
+                                        placeholder="Correo electrónico" required />
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" name="password" id="registerPassword"
+                                        placeholder="Contraseña" required />
+                                </div>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div id="contenedor-error-register"></div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i>Crear Cuenta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/login.js"></script>
+</body>
+
+</html>

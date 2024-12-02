@@ -6,7 +6,8 @@ const  ProductoSchema = new mongoose.Schema({
     descripcionProducto: String,
     precioProducto: Number,
     categoriaProducto: { type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' },
-    estadoProducto: Boolean
+    estadoProducto: Boolean,
+    imagenProducto: String
 });
 
 // definiendo el modelo
