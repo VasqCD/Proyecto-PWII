@@ -1,80 +1,106 @@
-
 const Bebida = require('../models/BebidasModel');
+const Categoria = require('../models/CategoriasModel');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
 
 // servicio para crear una bebida
 exports.crearBebida = async (req, res) => {
     try {
-        let pNombre = req.body.nombreBebida;
-        let pDescripcion = req.body.descripcionBebida;
-        let pPrecio = req.body.precioBebida;
-        let pCategoria = req.body.categoriaBebida;
-        let pEstado = req.body.estadoBebida;
-
-        let bebida = new Bebida({
-            nombreBebida: pNombre,
-            descripcionBebida: pDescripcion,
-            precioBebida: pPrecio,
-            categoriaBebida: pCategoria,
-            estadoBebida: pEstado
+        const form = new formidable.IncomingForm({
+            maxFileSize: 10 * 1024 * 1024,
+            keepExtensions: true
         });
 
-        // validar que se llenen todos los campos
-        if (!pNombre) {
-            return res.status(400).send("El nombre de la bebida es obligatorio");
-        }
-        if (!pDescripcion) {
-            return res.status(400).send("La descripcion de la bebida es obligatoria");
-        }
-        if (!pPrecio) {
-            return res.status(400).send("El precio de la bebida es obligatorio");
-        }
-        if (!pCategoria) {
-            return res.status(400).send("La categoria de la bebida es obligatoria");
-        }
-        if (pEstado === undefined) {
-            return res.status(400).send("El estado de la bebida es obligatorio");
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error al procesar el formulario' });
+            }
 
-        }
+            // Validaciones
+            if (!fields.nombreBebida || !fields.nombreBebida[0]) {
+                return res.status(400).json({ error: 'El nombre de la bebida es requerido' });
+            }
+            if (!fields.descripcionBebida || !fields.descripcionBebida[0]) {
+                return res.status(400).json({ error: 'La descripción de la bebida es requerida' });
+            }
+            if (!fields.precioBebida || !fields.precioBebida[0]) {
+                return res.status(400).json({ error: 'El precio de la bebida es requerido' });
+            }
+            if (!fields.categoriaBebida || !fields.categoriaBebida[0]) {
+                return res.status(400).json({ error: 'La categoría de la bebida es requerida' });
+            }
+            if (!files.imagen) {
+                return res.status(400).json({ error: 'La imagen de la bebida es requerida' });
+            }
 
-        // guardar la bebida en la base de datos
-        const bebidaGuardada = await bebida.save();
-        res.status(201).send(bebidaGuardada);
+            // Verificar categoría
+            const categoriaId = fields.categoriaBebida[0];
+            const categoria = await Categoria.findById(categoriaId);
+            if (!categoria) {
+                return res.status(404).json({ error: `No se encontró la categoría: ${categoriaId}` });
+            }
+
+            // Manejar imagen
+            let imagenUrl = '';
+            if (files.imagen && files.imagen[0]) {
+                const file = files.imagen[0];
+                const dirPath = path.join(__dirname, '../assets/uploads');
+                if (!fs.existsSync(dirPath)) {
+                    fs.mkdirSync(dirPath, { recursive: true });
+                }
+
+                const fileName = `bebida_${Date.now()}${path.extname(file.originalFilename || '')}`;
+                const newPath = path.join(dirPath, fileName);
+                fs.renameSync(file.filepath, newPath);
+                imagenUrl = `/assets/uploads/${fileName}`;
+            }
+
+            // Crear bebida
+            const bebida = new Bebida({
+                nombreBebida: fields.nombreBebida[0],
+                descripcionBebida: fields.descripcionBebida[0],
+                precioBebida: fields.precioBebida[0],
+                categoriaBebida: categoriaId,
+                estadoBebida: fields.estadoBebida[0] === 'true',
+                imagenBebida: imagenUrl
+            });
+
+            const bebidaGuardada = await bebida.save();
+            res.status(201).json(bebidaGuardada);
+        });
 
     } catch (error) {
-        console.log("Error en crearBebida: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+        console.error('Error en crearBebida:', error);
+        res.status(500).json({ error: 'Error al crear la bebida' });
     }
 };
 
 // servicio para obtener todas las bebidas con paginación
 exports.obtenerBebidas = async (req, res) => {
     try {
-        // Obtener el número de página y límite de la query
-        const pagina = parseInt(req.query.pagina) || 1; // Si no se especifica, primera página
-        const limite = parseInt(req.query.limite) || 5; 
-
-        // Calcular el número de documentos a saltar
+        const pagina = parseInt(req.query.pagina) || 1;
+        const limite = parseInt(req.query.limite) || 5;
         const skip = (pagina - 1) * limite;
 
-        // Obtener bebidas con paginación
         const bebidas = await Bebida.find()
+            .populate('categoriaBebida', 'nombreCategoria')
             .skip(skip)
             .limit(limite);
 
-        // Obtener el total de bebidas para calcular el total de páginas
         const totalBebidas = await Bebida.countDocuments();
         const totalPaginas = Math.ceil(totalBebidas / limite);
 
         res.status(200).json({
             bebidas,
-            "Pagina": pagina,
-            "De": totalPaginas,
-            "Total bebidas": totalBebidas
+            paginaActual: pagina,
+            totalPaginas,
+            totalBebidas
         });
 
     } catch (error) {
-        console.log("Error en obtenerBebidas: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+        console.error("Error en obtenerBebidas:", error);
+        res.status(500).json({ error: "Error al obtener bebidas" });
     }
 };
 
@@ -98,50 +124,69 @@ exports.obtenerBebidaPorId = async (req, res) => {
 // servicio para actualizar una bebida
 exports.updateBebida = async (req, res) => {
     try {
-        const { id } = req.params;
+        const form = new formidable.IncomingForm({
+            maxFileSize: 10 * 1024 * 1024,
+            keepExtensions: true
+        });
 
-        let pNombre = req.body.nombreBebida;
-        let pDescripcion = req.body.descripcionBebida;
-        let pPrecio = req.body.precioBebida;
-        let pCategoria = req.body.categoriaBebida;
-        let pEstado = req.body.estadoBebida;
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error al procesar el formulario' });
+            }
 
-        if (!pNombre) {
-            return res.status(400).send("El nombre de la bebida es obligatorio");
-        }
-        if (!pDescripcion) {
-            return res.status(400).send("La descripcion de la bebida es obligatoria");
-        }
-        if (!pPrecio) {
-            return res.status(400).send("El precio de la bebida es obligatorio");
-        }
-        if (!pCategoria) {
-            return res.status(400).send("La categoria de la bebida es obligatoria");
-        }
-        if (pEstado === undefined) {
-            return res.status(400).send("El estado de la bebida es obligatorio");
+            const { id } = req.params;
 
-        }
+            // Validaciones
+            if (!fields.nombreBebida || !fields.nombreBebida[0]) {
+                return res.status(400).json({ error: 'El nombre de la bebida es requerido' });
+            }
+            if (!fields.descripcionBebida || !fields.descripcionBebida[0]) {
+                return res.status(400).json({ error: 'La descripción de la bebida es requerida' });
+            }
+            if (!fields.precioBebida || !fields.precioBebida[0]) {
+                return res.status(400).json({ error: 'El precio de la bebida es requerido' });
+            }
+            if (!fields.categoriaBebida || !fields.categoriaBebida[0]) {
+                return res.status(400).json({ error: 'La categoría de la bebida es requerida' });
+            }
 
-        const bebida = {
-            nombreBebida: pNombre,
-            descripcionBebida: pDescripcion,
-            precioBebida: pPrecio,
-            categoriaBebida: pCategoria,
-            estadoBebida: pEstado
-        }
+            const bebida = {
+                nombreBebida: fields.nombreBebida[0],
+                descripcionBebida: fields.descripcionBebida[0],
+                precioBebida: fields.precioBebida[0],
+                categoriaBebida: fields.categoriaBebida[0],
+                estadoBebida: fields.estadoBebida[0] === 'true'
+            };
 
-        const bebidaActualizada = await Bebida.findByIdAndUpdate(id, bebida, { new: true });
+            // Manejar imagen si se proporciona una nueva
+            if (files.imagen && files.imagen[0]) {
+                const file = files.imagen[0];
+                const dirPath = path.join(__dirname, '../assets/uploads');
+                if (!fs.existsSync(dirPath)) {
+                    fs.mkdirSync(dirPath, { recursive: true });
+                }
 
-        if (bebidaActualizada) {
-            res.status(200).send(bebidaActualizada);
-        } else {
-            res.status(404).send("Bebida no encontrada");
-        }
+                const fileName = `bebida_${Date.now()}${path.extname(file.originalFilename || '')}`;
+                const newPath = path.join(dirPath, fileName);
+                fs.renameSync(file.filepath, newPath);
+                bebida.imagenBebida = `/assets/uploads/${fileName}`;
+            }
 
+            const bebidaActualizada = await Bebida.findByIdAndUpdate(
+                id, 
+                bebida, 
+                { new: true }
+            );
+
+            if (!bebidaActualizada) {
+                return res.status(404).json({ error: 'Bebida no encontrada' });
+            }
+
+            res.json(bebidaActualizada);
+        });
     } catch (error) {
-        console.log("Error en updateBebida: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+        console.error('Error en updateBebida:', error);
+        res.status(500).json({ error: 'Error al actualizar la bebida' });
     }
 };
 

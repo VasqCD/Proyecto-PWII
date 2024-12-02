@@ -1,17 +1,15 @@
-// Obtener parámetros y token
+
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 const mode = urlParams.get('Mode');
 const token = localStorage.getItem('token');
 
-// Redirección si no hay token
 if (!token) {
     window.location.href = '../pages/login.html';
 }
 
-// Referencias a elementos del DOM
-const form = document.querySelector('#productoForm');
-const productNameInput = document.querySelector('#name');
+const form = document.querySelector('#bebidaForm');
+const nameInput = document.querySelector('#name');
 const descriptionInput = document.querySelector('#description');
 const categoryInput = document.querySelector('#category');
 const priceInput = document.querySelector('#price');
@@ -19,7 +17,6 @@ const statusInput = document.querySelector('#status');
 const imageInput = document.querySelector('#image');
 const contenedorError = document.querySelector('#contenedor-error');
 
-// Función para cargar categorías
 function cargarCategorias(callback) {
     fetch('http://localhost:3001/categorias', {
         headers: {
@@ -30,7 +27,7 @@ function cargarCategorias(callback) {
     .then(data => {
         categoryInput.innerHTML = '<option value="">Seleccione una categoría</option>';
         data.forEach(categoria => {
-            if (categoria.tipoCategoria === 'PRODUCTOS') {
+            if (categoria.tipoCategoria === 'BEBIDAS') {
                 const option = document.createElement('option');
                 option.value = categoria._id;
                 option.textContent = categoria.nombreCategoria;
@@ -44,57 +41,52 @@ function cargarCategorias(callback) {
     .catch(error => mostrarError('Error al cargar categorías'));
 }
 
-// Función para cargar datos del producto
-function cargarDatosProducto() {
+function cargarDatosBebida() {
     if (mode === 'UPD' || mode === 'DLT') {
-        fetch(`http://localhost:3001/productos/${id}`, {
+        fetch(`http://localhost:3001/bebidas/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(response => {
-            if (!response.ok) throw new Error('Error al obtener el producto');
+            if (!response.ok) throw new Error('Error al obtener la bebida');
             return response.json();
         })
-        .then(producto => {
+        .then(bebida => {
             cargarCategorias(() => {
-                productNameInput.value = producto.nombreProducto;
-                descriptionInput.value = producto.descripcionProducto;
-                priceInput.value = producto.precioProducto;
-                categoryInput.value = producto.categoriaProducto._id;
-                statusInput.value = producto.estadoProducto ? "1" : "0";
+                nameInput.value = bebida.nombreBebida;
+                descriptionInput.value = bebida.descripcionBebida;
+                priceInput.value = bebida.precioBebida;
+                categoryInput.value = bebida.categoriaBebida._id;
+                statusInput.value = bebida.estadoBebida ? "1" : "0";
                 
-                if (producto.imagenProducto) {
+                if (bebida.imagenBebida) {
                     const imagenActualDiv = document.querySelector('#imagenActual');
                     const imagenPreview = imagenActualDiv.querySelector('img');
-                    imagenPreview.src = `http://localhost:3001${producto.imagenProducto}`;
+                    imagenPreview.src = `http://localhost:3001${bebida.imagenBebida}`;
                     imagenActualDiv.classList.remove('d-none');
                     imageInput.removeAttribute('required');
                 }
                 
                 if (mode === 'DLT') {
-                    // Deshabilitar todos los campos excepto el botón submit
                     Array.from(form.elements).forEach(element => {
                         if (element.type !== 'submit') {
                             element.disabled = true;
                         }
                     });
-                    
-                    // Cambiar el texto y estilo del botón
                     const submitButton = form.querySelector('button[type="submit"]');
-                    submitButton.textContent = 'Eliminar Producto';
+                    submitButton.textContent = 'Eliminar Bebida';
                     submitButton.classList.remove('btn-primary');
                     submitButton.classList.add('btn-danger');
                 }
             });
         })
-        .catch(error => mostrarError('Error al cargar el producto'));
+        .catch(error => mostrarError('Error al cargar la bebida'));
     } else {
         cargarCategorias();
     }
 }
 
-// Función para mostrar errores
 function mostrarError(mensaje) {
     contenedorError.classList.remove('d-none');
     contenedorError.innerHTML = `
@@ -105,22 +97,21 @@ function mostrarError(mensaje) {
     `;
 }
 
-// Manejo del envío del formulario
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const formData = new FormData();
-    formData.append('nombreProducto', productNameInput.value);
-    formData.append('descripcionProducto', descriptionInput.value);
-    formData.append('categoriaProducto', categoryInput.value);
-    formData.append('precioProducto', priceInput.value);
-    formData.append('estadoProducto', statusInput.value === "1");
+    formData.append('nombreBebida', nameInput.value);
+    formData.append('descripcionBebida', descriptionInput.value);
+    formData.append('categoriaBebida', categoryInput.value);
+    formData.append('precioBebida', priceInput.value);
+    formData.append('estadoBebida', statusInput.value === "1");
     
     if (imageInput.files[0]) {
         formData.append('imagen', imageInput.files[0]);
     }
 
-    let url = 'http://localhost:3001/productos';
+    let url = 'http://localhost:3001/bebidas';
     let metodo = 'POST';
 
     if (mode === 'UPD') {
@@ -130,7 +121,6 @@ form.addEventListener('submit', (e) => {
         url += `/${id}`;
         metodo = 'DELETE';
     }
-    // Si no hay mode, será POST por defecto
 
     fetch(url, {
         method: metodo,
@@ -140,34 +130,21 @@ form.addEventListener('submit', (e) => {
         body: formData
     })
     .then(response => {
-        if (!response.ok) {
-            return response.text().then(text => {
-                throw new Error(text || 'Error al procesar la operación');
-            });
-        }
-        window.location.href = '../pages/productos.html';
+        if (!response.ok) throw new Error('Error al procesar la operación');
+        window.location.href = '../pages/bebidas.html';
     })
-    .catch(error => {
-        console.error('Error:', error);
-        mostrarError(error.message);
-    });
+    .catch(error => mostrarError(error.message));
 });
 
-// Inicialización al cargar el documento
-document.addEventListener('DOMContentLoaded', () => {
-    cargarDatosProducto();
-});
-
-// titulo segun el modo
 document.addEventListener('DOMContentLoaded', () => {
     const titulo = document.querySelector('.card-title');
     if (mode === 'UPD') {
-        titulo.innerHTML = '<i class="fas fa-edit me-2"></i>Editar Producto';
+        titulo.innerHTML = '<i class="fas fa-edit me-2"></i>Editar Bebida';
     } else if (mode === 'DLT') {
-        titulo.innerHTML = '<i class="fas fa-trash-alt me-2"></i>Eliminar Producto';
+        titulo.innerHTML = '<i class="fas fa-trash-alt me-2"></i>Eliminar Bebida';
     } else {
-        titulo.innerHTML = '<i class="fas fa-plus me-2"></i>Nuevo Producto';
+        titulo.innerHTML = '<i class="fas fa-glass-martini-alt me-2"></i>Nueva Bebida';
     }
-
-    cargarDatosProducto();
+    
+    cargarDatosBebida();
 });

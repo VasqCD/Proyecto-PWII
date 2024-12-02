@@ -6,8 +6,12 @@ const  BebidaSchema = new mongoose.Schema({
     nombreBebida: String,
     descripcionBebida: String,
     precioBebida: Number,
-    categoriaBebida: String,
-    estadoBebida: Boolean
+    categoriaBebida: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Categoria' 
+    },
+    estadoBebida: Boolean,
+    imagenBebida: String
 });
 
 // definiendo el modelo

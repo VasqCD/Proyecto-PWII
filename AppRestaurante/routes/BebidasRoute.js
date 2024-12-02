@@ -9,9 +9,7 @@ module.exports = (app) => {
         BebidasController.crearBebida);
 
     // obtener todas las bebidas
-    app.get('/bebidas', 
-        auth.authenticate,
-        auth.checkRol(['admin', 'gerente', 'user']),
+    app.get('/bebidas',
         BebidasController.obtenerBebidas);
 
     // obtener una bebida por id
