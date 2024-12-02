@@ -38,13 +38,12 @@ exports.crearProducto = async (req, res) => {
                 return res.status(400).json({ error: 'La imagen del producto es requerida' });
             }
 
-            // Buscar categoria por nombre
-            const categoria = await Categoria.findOne({
-                nombreCategoria: { $regex: fields.categoriaProducto[0], $options: 'i' }
-            });
+            // Buscar categoria 
+            const categoriaId = fields.categoriaProducto[0];
+            const categoria = await Categoria.findById(categoriaId);
 
             if (!categoria) {
-                return res.status(404).json({ error: `No se encontró la categoría: ${fields.categoriaProducto[0]}` });
+                return res.status(404).json({ error: `No se encontró la categoría con ID: ${categoriaId}` });
             }
 
             // Manejar la imagen
@@ -67,7 +66,7 @@ exports.crearProducto = async (req, res) => {
                 nombreProducto: fields.nombreProducto[0],
                 descripcionProducto: fields.descripcionProducto[0],
                 precioProducto: fields.precioProducto[0],
-                categoriaProducto: categoria._id,
+                categoriaProducto: categoriaId, // Usar el ID directamente
                 estadoProducto: fields.estadoProducto[0] === 'true',
                 imagenProducto: imagenUrl
             });
@@ -81,62 +80,6 @@ exports.crearProducto = async (req, res) => {
         res.status(500).send('Error al crear el producto');
     }
 };
-
-
-/* servicio para crear un producto sin imagen
-exports.crearProducto = async (req, res) => {
-    try {
-        let pNombre = req.body.nombreProducto;
-        let pDescripcion = req.body.descripcionProducto;
-        let pPrecio = req.body.precioProducto;
-        let pCategoria = req.body.categoriaProducto;
-        let pEstado = req.body.estadoProducto;
-
-        
-
-        // validar que se llenen todos los campos
-        if (!pNombre) {
-            return res.status(400).send("El nombre del producto es obligatorio");
-        }
-        if (!pDescripcion) {
-            return res.status(400).send("La descripcion del producto es obligatoria");
-        }
-        if (!pPrecio) {
-            return res.status(400).send("El precio del producto es obligatorio");
-        }
-        if (!pCategoria) {
-            return res.status(400).send("La categoria del producto es obligatoria");
-        }
-        if (pEstado === undefined) {
-            return res.status(400).send("El estado del producto es obligatorio");
-        }
-
-        const categoria = await Categoria.findOne({ 
-            nombreCategoria: { $regex: pCategoria, $options: 'i' } 
-        });
-
-        if (!categoria) {
-            return res.status(404).send(`La categoría ${pCategoria} no existe`);
-        }
-
-        let producto = new Producto({
-            nombreProducto: pNombre,
-            descripcionProducto: pDescripcion,
-            precioProducto: pPrecio,
-            categoriaProducto: categoria._id,
-            estadoProducto: pEstado
-        });
-
-        // guardar el producto en la base de datos
-        const productoGuardado = await producto.save();
-        res.status(201).send(productoGuardado);
-
-    } catch (error) {
-        console.log("Error en crearProducto: ", error);
-        res.status(500).send("Hubo un error en el servidor");
-    }
-};
-*/
 
 // servicio para obtener todos los productos 
 // incluye la paginación y la ruta de la imagen
@@ -168,35 +111,6 @@ exports.obtenerProductos = async (req, res) => {
 };
 
 
-/* servicio para obtener todos los productos 
-// incluye la paginación
-exports.obtenerProductos = async (req, res) => {
-    try {
-        const pagina = parseInt(req.query.pagina) || 1; 
-        const limite = parseInt(req.query.limite) || 10; 
-        const skip = (pagina - 1) * limite;
-
-        const productos = await Producto.find()
-            .skip(skip)
-            .limit(limite);
-
-        const totalProductos = await Producto.countDocuments();
-        const totalPaginas = Math.ceil(totalProductos / limite);
-
-        res.status(200).json({
-            productos,
-            paginaActual: pagina,
-            totalPaginas,
-            totalProductos
-        });
-
-    } catch (error) {
-        console.log("Error en obtenerProductos: ", error);
-        res.status(500).send("Hubo un error en el servidor");
-    }
-};
-*/
-
 // servicio para obtener un producto por id
 exports.obtenerProductoPorId = async (req, res) => {
     try {
@@ -217,50 +131,69 @@ exports.obtenerProductoPorId = async (req, res) => {
 // servicio para actualizar un producto
 exports.updateProducto = async (req, res) => {
     try {
-        const { id } = req.params;
+        const form = new formidable.IncomingForm({
+            maxFileSize: 10 * 1024 * 1024,
+            keepExtensions: true
+        });
 
-        let pNombre = req.body.nombreProducto;
-        let pDescripcion = req.body.descripcionProducto;
-        let pPrecio = req.body.precioProducto;
-        let pCategoria = req.body.categoriaProducto;
-        let pEstado = req.body.estadoProducto;
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error al procesar el formulario' });
+            }
 
-        if (!pNombre) {
-            return res.status(400).send("El nombre del producto es obligatorio");
-        }
-        if (!pDescripcion) {
-            return res.status(400).send("La descripcion del producto es obligatoria");
-        }
-        if (!pPrecio) {
-            return res.status(400).send("El precio del producto es obligatorio");
-        }
-        if (!pCategoria) {
-            return res.status(400).send("La categoria del producto es obligatoria");
-        }
-        if (pEstado === undefined) {
-            return res.status(400).send("El estado del producto es obligatorio");
+            const { id } = req.params;
 
-        }
+            // Validaciones
+            if (!fields.nombreProducto || !fields.nombreProducto[0]) {
+                return res.status(400).json({ error: 'El nombre del producto es requerido' });
+            }
+            if (!fields.descripcionProducto || !fields.descripcionProducto[0]) {
+                return res.status(400).json({ error: 'La descripción del producto es requerida' });
+            }
+            if (!fields.precioProducto || !fields.precioProducto[0]) {
+                return res.status(400).json({ error: 'El precio del producto es requerido' });
+            }
+            if (!fields.categoriaProducto || !fields.categoriaProducto[0]) {
+                return res.status(400).json({ error: 'La categoría del producto es requerida' });
+            }
 
-        const producto = {
-            nombreProducto: pNombre,
-            descripcionProducto: pDescripcion,
-            precioProducto: pPrecio,
-            categoriaProducto: pCategoria,
-            estadoProducto: pEstado
-        }
+            const producto = {
+                nombreProducto: fields.nombreProducto[0],
+                descripcionProducto: fields.descripcionProducto[0],
+                precioProducto: fields.precioProducto[0],
+                categoriaProducto: fields.categoriaProducto[0],
+                estadoProducto: fields.estadoProducto[0] === 'true'
+            };
 
-        const productoActualizado = await Producto.findByIdAndUpdate(id, producto, { new: true });
+            // Manejar la imagen si se proporciona una nueva
+            if (files.imagen && files.imagen[0]) {
+                const file = files.imagen[0];
+                const dirPath = path.join(__dirname, '../assets/uploads');
+                if (!fs.existsSync(dirPath)) {
+                    fs.mkdirSync(dirPath, { recursive: true });
+                }
 
-        if (productoActualizado) {
-            res.status(200).send(productoActualizado);
-        } else {
-            res.status(404).send("Producto no encontrado");
-        }
+                const fileName = `producto_${Date.now()}${path.extname(file.originalFilename || '')}`;
+                const newPath = path.join(dirPath, fileName);
+                fs.renameSync(file.filepath, newPath);
+                producto.imagenProducto = `/assets/uploads/${fileName}`;
+            }
 
+            const productoActualizado = await Producto.findByIdAndUpdate(
+                id, 
+                producto, 
+                { new: true }
+            );
+
+            if (!productoActualizado) {
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
+
+            res.json(productoActualizado);
+        });
     } catch (error) {
-        console.log("Error en updateProducto: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+        console.error('Error en updateProducto:', error);
+        res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 };
 

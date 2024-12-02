@@ -5,83 +5,61 @@ const limit = 10;
 function fetchProductos(page) {
     fetch(`http://localhost:3001/productos?pagina=${page}&limite=${limit}`)
         .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error("Error al obtener productos");
+            if (!response.ok) throw new Error("Error al obtener productos");
+            return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            console.log(data); // Mantener para debug
             let tableBody = document.querySelector("#miTabla tbody");
             tableBody.innerHTML = "";
 
             data.productos.forEach(function (item) {
                 let fila = tableBody.insertRow();
+                
+                // Celdas de datos
                 fila.insertCell().textContent = item._id;
                 if (item.imagenProducto) {
-                    fila.insertCell().innerHTML = `<img src="http://localhost:3001${item.imagenProducto}" alt="${item.nombreProducto}" class="img-thumbnail" width="50" />`;
+                    const imagenCell = fila.insertCell();
+                    imagenCell.innerHTML = `
+                        <img src="http://localhost:3001${item.imagenProducto}" 
+                             alt="${item.nombreProducto}" 
+                             class="img-thumbnail cursor-pointer" 
+                             width="50" 
+                             style="cursor: pointer;"
+                             onclick="mostrarImagenAmpliada('http://localhost:3001${item.imagenProducto}', '${item.nombreProducto}')"
+                        />`;
                 } else {
                     fila.insertCell().textContent = "Sin imagen";
                 }
-                
                 fila.insertCell().textContent = item.nombreProducto;
                 fila.insertCell().textContent = item.descripcionProducto;
                 fila.insertCell().textContent = item.categoriaProducto.nombreCategoria;
                 fila.insertCell().textContent = item.precioProducto;
-                fila.insertCell().textContent = item.estadoProducto
-                    ? "Activo"
-                    : "Inactivo";
+                let estadoCell = fila.insertCell();
+                estadoCell.innerHTML = `<span class="badge ${item.estadoProducto ? 'bg-success' : 'bg-danger'} rounded-pill">
+                    ${item.estadoProducto ? 'Activo' : 'Inactivo'}
+                </span>`;
 
+                // Celda de acciones
                 let accionesCell = fila.insertCell();
+                
+                // Botón Editar
                 let linkUpdate = document.createElement("a");
-
-                linkUpdate.href = '../pages/formproductos.html?Mode=UPD&id='+item._id;
-                linkUpdate.innerHTML = '<i class="fas fa-edit"></i>';
+                linkUpdate.href = `../pages/formproductos.html?Mode=UPD&id=${item._id}`;
+                linkUpdate.innerHTML = '<i class="fas fa-edit btn btn-warning btn-sm me-2"></i>';
                 accionesCell.appendChild(linkUpdate);
 
-                // botones de accion
-                // Botón Editar
-
-                let btnEditar = document.createElement("button");
-                btnEditar.className = "btn btn-warning btn-sm me-2";
-                btnEditar.innerHTML = '<i class="fas fa-edit"></i>';
-                btnEditar.onclick = () => cargarDatosProducto(item._id);
-
                 // Botón Eliminar
-                let btnEliminar = document.createElement("button");
-                btnEliminar.className = "btn btn-danger btn-sm";
-                btnEliminar.innerHTML = '<i class="fas fa-trash"></i>';
-                btnEliminar.onclick = async () => {
-                    if (confirm("¿Está seguro de eliminar este producto?")) {
-                        try {
-                            const response = await fetch(
-                                `http://localhost:3001/productos/${item._id}`,
-                                {
-                                    method: "DELETE",
-                                }
-                            );
-
-                            if (response.ok) {
-                                fetchProductos(currentPage);
-                            } else {
-                                throw new Error("Error al eliminar el producto");
-                            }
-                        } catch (error) {
-                            console.error("Error:", error);
-                            alert("Error al eliminar el producto");
-                        }
-                    }
-                };
-
-                // Agregar botones a la celda de acciones
-                accionesCell.appendChild(btnEditar);
-                accionesCell.appendChild(btnEliminar);
+                let linkDelete = document.createElement("a");
+                linkDelete.href = `../pages/formproductos.html?Mode=DLT&id=${item._id}`;
+                linkDelete.innerHTML = '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
+                accionesCell.appendChild(linkDelete);
             });
 
             mostrarPaginacion(data.paginaActual, data.totalPaginas);
         })
         .catch(function (error) {
-            console.log(error);
+            console.error("Error:", error);
         });
 }
 
@@ -138,121 +116,33 @@ function generarBotonesPagina(paginaActual, totalPaginas) {
 // Obtener los productos
 fetchProductos(currentPage);
 
-// Función para crear o actualizar un producto
-async function crearActualizarProducto() {
-    const productId = document.getElementById("productId").value;
-    const formData = new FormData();
 
-    formData.append(
-        "nombreProducto",
-        document.getElementById("productName").value
-    );
-    formData.append(
-        "descripcionProducto",
-        document.getElementById("description").value
-    );
-    formData.append(
-        "categoriaProducto",
-        document.getElementById("category").value
-    );
-    formData.append("precioProducto", document.getElementById("price").value);
-    formData.append(
-        "estadoProducto",
-        document.getElementById("status").value === "1"
-    );
+document.body.insertAdjacentHTML('beforeend', `
+    <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagenModalLabel">Vista previa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" alt="" id="imagenAmpliada" class="img-fluid" style="max-height: 80vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+`);
 
-    const imageFile = document.getElementById("image").files[0];
-    if (imageFile) {
-        formData.append("imagen", imageFile);
-    }
-
-    try {
-        const url = productId
-            ? `http://localhost:3001/productos/${productId}`
-            : "http://localhost:3001/productos";
-
-        const method = productId ? "PUT" : "POST";
-
-        const response = await fetch(url, {
-            method: method,
-            body: formData,
-        });
-
-        if (!response.ok) throw new Error("Error en la operación");
-
-        // Cerrar modal y recargar datos
-        const modal = bootstrap.Modal.getInstance(
-            document.getElementById("addProduct")
-        );
-        modal.hide();
-        fetchProductos(currentPage);
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error al guardar el producto");
-    }
+function mostrarImagenAmpliada(src, alt) {
+    const modal = new bootstrap.Modal(document.getElementById('imagenModal'));
+    const imagenAmpliada = document.getElementById('imagenAmpliada');
+    const modalTitle = document.getElementById('imagenModalLabel');
+    
+    imagenAmpliada.src = src;
+    imagenAmpliada.alt = alt;
+    modalTitle.textContent = alt;
+    
+    modal.show();
 }
 
-// Función para cargar datos de un producto en el modal
-async function cargarDatosProducto(id) {
-    try {
-        const response = await fetch(`http://localhost:3001/productos/${id}`);
-        if (!response.ok) throw new Error("Error al obtener el producto");
-
-        const producto = await response.json();
-
-        document.getElementById("productId").value = producto._id;
-        document.getElementById("productName").value = producto.nombreProducto;
-        document.getElementById("description").value = producto.descripcionProducto;
-        document.getElementById("category").value = producto.categoriaProducto;
-        document.getElementById("price").value = producto.precioProducto;
-        document.getElementById("status").value = producto.estadoProducto
-            ? "1"
-            : "0";
-
-        // Abrir el modal
-        const modal = new bootstrap.Modal(document.getElementById("addProduct"));
-        modal.show();
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error al cargar el producto");
-    }
-}
-
-// Función para cargar categorías en el select
-async function cargarCategorias() {
-    try {
-        const response = await fetch("http://localhost:3001/categorias");
-        if (!response.ok) throw new Error("Error al obtener categorías");
-
-        const categorias = await response.json();
-        const selectCategoria = document.getElementById("category");
-
-        selectCategoria.innerHTML =
-            '<option value="">Seleccione una categoría</option>';
-        categorias.forEach((categoria) => {
-            if (categoria.estadoCategoria) {
-                selectCategoria.innerHTML += `
-                    <option value="${categoria._id}">
-                        ${categoria.nombreCategoria}
-                    </option>
-                `;
-            }
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error al cargar las categorías");
-    }
-}
-
-// Evento para cargar categorías al abrir el modal
-document
-    .getElementById("addProduct")
-    .addEventListener("show.bs.modal", function (event) {
-        cargarCategorias();
-
-        // Si es nuevo producto, limpiar el formulario
-        if (!event.relatedTarget.dataset.id) {
-            document.getElementById("productForm").reset();
-            document.getElementById("productId").value = "";
-        }
-    });
+window.mostrarImagenAmpliada = mostrarImagenAmpliada;

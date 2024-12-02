@@ -86,3 +86,27 @@
     font-weight: bold;
     color: #007bff;
 }
+
+.form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+.form-title {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25);
+}
+.btn-submit {
+    width: 100%;
+    padding: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

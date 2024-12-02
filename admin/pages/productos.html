@@ -43,8 +43,9 @@
         <!-- Agregar titulo de la página-->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3">Gestiona tus productos</h1>
-            <button class="btn btn-primary-orange" data-bs-toggle="modal" data-bs-target="#productoModal">Nuevo
-                Producto</button>
+            <a href="../pages/formproductos.html" class="btn btn-primary-orange">
+                <i class="fas fa-plus me-2"></i>Nuevo Producto
+            </a>
         </div>
 
         <!-- Agregar línea con estilo-->
@@ -79,61 +80,6 @@
             </ul>
         </nav>
     </main>
-
-    <!-- Modal de agregar/editar producto -->
-    <div class="modal fade" id="addProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Editar/Agregar Producto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="productForm" enctype="multipart/form-data">
-                        <input type="hidden" id="productId" name="productId">
-                        <div class="mb-3">
-                            <label for="productName" class="form-label">Nombre del producto</label>
-                            <input type="text" class="form-control" id="productName" name="productName"
-                                placeholder="Nombre" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="description" name="description" rows="3"
-                                placeholder="Detalles sobre el producto." required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Categoría</label>
-                            <select class="form-control" id="category" name="category" required>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Precio</label>
-                            <input type="number" step="0.01" class="form-control" id="price" name="price"
-                                placeholder="Precio" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Imagen</label>
-                            <input type="file" class="form-control" id="image" name="image" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Estado</label>
-                            <select class="form-control" id="status" name="status" required>
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" onclick="createOrUpdateProduct()" class="btn btn-primary">Guardar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/productos.js"></script>

@@ -7,54 +7,32 @@ const formidable = require('formidable');
 // servicio para crear una categoria con formidable
 exports.crearCategoria = async (req, res) => {
     try {
-        const form = new formidable.IncomingForm({
-            maxFileSize: 10 * 1024 * 1024,
-            keepExtensions: true
+        const { nombreCategoria, descripcionCategoria, tipoCategoria, estadoCategoria } = req.body;
+
+        // Validaciones
+        if (!nombreCategoria) {
+            return res.status(400).json({ error: 'El nombre de la categoría es requerido' });
+        }
+        if (!descripcionCategoria) {
+            return res.status(400).json({ error: 'La descripción de la categoría es requerida' });
+        }
+        if (!tipoCategoria) {
+            return res.status(400).json({ error: 'El tipo de categoría es requerido' });
+        }
+        if (!['PRODUCTOS', 'BEBIDAS'].includes(tipoCategoria.toUpperCase())) {
+            return res.status(400).json({ error: 'El tipo de categoría debe ser PRODUCTOS o BEBIDAS' });
+        }
+
+        // Crear categoria
+        const categoria = new Categoria({
+            nombreCategoria,
+            descripcionCategoria,
+            tipoCategoria: tipoCategoria.toUpperCase(),
+            estadoCategoria: estadoCategoria !== undefined ? estadoCategoria : true
         });
 
-        form.parse(req, async (err, fields, files) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error al procesar el formulario' });
-            }
-
-            // Validaciones de campos
-            if (!fields.nombreCategoria || !fields.nombreCategoria[0]) {
-                return res.status(400).json({ error: 'El nombre de la categoría es requerido' });
-            }
-            if (!fields.descripcionCategoria || !fields.descripcionCategoria[0]) {
-                return res.status(400).json({ error: 'La descripción de la categoría es requerida' });
-            }
-            if (!files.imagen) {
-                return res.status(400).json({ error: 'La imagen de la categoría es requerida' });
-            }            
-
-
-            // Manejar la imagen
-            let imagenUrl = '';
-            if (files.imagen && files.imagen[0]) {
-                const file = files.imagen[0];
-                const dirPath = path.join(__dirname, '../assets/uploads');
-                if (!fs.existsSync(dirPath)) {
-                    fs.mkdirSync(dirPath, { recursive: true });
-                }
-
-                const fileName = `categoria_${Date.now()}${path.extname(file.originalFilename || '')}`;
-                const newPath = path.join(dirPath, fileName);
-                fs.renameSync(file.filepath, newPath);
-                imagenUrl = `/assets/uploads/${fileName}`;
-            }
-
-            // Crear categoria
-            const categoria = new Categoria({
-                nombreCategoria: fields.nombreCategoria[0],
-                descripcionCategoria: fields.descripcionCategoria[0],
-                estadoCategoria: fields.estadoCategoria ? fields.estadoCategoria[0] === 'true' : true,
-                imagenCategoria: imagenUrl
-            });
-
-            const categoriaGuardada = await categoria.save();
-            res.status(201).json(categoriaGuardada);
-        });
+        const categoriaGuardada = await categoria.save();
+        res.status(201).json(categoriaGuardada);
 
     } catch (error) {
         console.error('Error en crearCategoria:', error);
@@ -92,47 +70,44 @@ exports.obtenerCategoriasPorId = async (req, res) => {
 
 // servicio para actualizar una categoria
 exports.updateCategoria = async (req, res) => {
-    try{
+    try {
         const { id } = req.params;
+        const { nombreCategoria, descripcionCategoria, tipoCategoria, estadoCategoria } = req.body;
 
-        let pNombre = req.body.nombreCategoria;
-        let pDescripcion = req.body.descripcionCategoria;
-        let pImagen = req.body.imagenCategoria;
-        let pEstado = req.body.estadoCategoria;
-        let pFechaCreacion = req.body.fechaCreacionCategoria;
-
-        if(!pNombre){
-            return res.status(400).send("El nombre de la categoria es obligatorio");
+        // Validaciones
+        if (!nombreCategoria) {
+            return res.status(400).json({ error: 'El nombre de la categoría es requerido' });
         }
-        if(!pDescripcion){
-            return res.status(400).send("La descripcion de la categoria es obligatoria");
+        if (!descripcionCategoria) {
+            return res.status(400).json({ error: 'La descripción de la categoría es requerida' });
         }
-        if(!pImagen){
-            return res.status(400).send("La imagen de la categoria es obligatoria");
+        if (!tipoCategoria) {
+            return res.status(400).json({ error: 'El tipo de categoría es requerido' });
         }
-        if(pEstado === undefined){
-            return res.status(400).send("El estado de la categoria es obligatorio");
+        if (!['PRODUCTOS', 'BEBIDAS'].includes(tipoCategoria.toUpperCase())) {
+            return res.status(400).json({ error: 'El tipo de categoría debe ser PRODUCTOS o BEBIDAS' });
         }
 
-        const categoria = {
-            nombreCategoria: pNombre,
-            descripcionCategoria: pDescripcion,
-            imagenCategoria: pImagen,
-            estadoCategoria: pEstado,
-            fechaCreacionCategoria: pFechaCreacion
+        const categoriaActualizada = await Categoria.findByIdAndUpdate(
+            id, 
+            {
+                nombreCategoria,
+                descripcionCategoria,
+                tipoCategoria: tipoCategoria.toUpperCase(),
+                estadoCategoria
+            },
+            { new: true }
+        );
+
+        if (categoriaActualizada) {
+            res.status(200).json(categoriaActualizada);
+        } else {
+            res.status(404).json({ error: 'Categoría no encontrada' });
         }
 
-        const categoriaActualizada = await Categoria.findByIdAndUpdate(id, categoria, {new: true});
-        
-        if(categoriaActualizada){
-            res.status(200).send(categoriaActualizada);
-        }else{
-            res.status(404).send("Categoria no encontrada");
-        }
-
-    }catch(error){
-        console.log("Error en updateCategoria: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+    } catch (error) {
+        console.error('Error en updateCategoria:', error);
+        res.status(500).json({ error: 'Error al actualizar la categoría' });
     }
 };
 
