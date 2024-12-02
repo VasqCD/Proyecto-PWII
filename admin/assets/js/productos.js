@@ -15,7 +15,7 @@ function fetchProductos(page) {
 
             data.productos.forEach(function (item) {
                 let fila = tableBody.insertRow();
-                
+
                 // Celdas de datos
                 fila.insertCell().textContent = item._id;
                 if (item.imagenProducto) {
@@ -33,33 +33,47 @@ function fetchProductos(page) {
                 }
                 fila.insertCell().textContent = item.nombreProducto;
                 fila.insertCell().textContent = item.descripcionProducto;
-                fila.insertCell().textContent = item.categoriaProducto.nombreCategoria;
+
+                const catCell = fila.insertCell();
+                catCell.textContent =
+                    item.categoriaProducto?.nombreCategoria || "Sin categoría";
                 fila.insertCell().textContent = item.precioProducto;
                 let estadoCell = fila.insertCell();
-                estadoCell.innerHTML = `<span class="badge ${item.estadoProducto ? 'bg-success' : 'bg-danger'} rounded-pill">
-                    ${item.estadoProducto ? 'Activo' : 'Inactivo'}
+                estadoCell.innerHTML = `<span class="badge ${item.estadoProducto ? "bg-success" : "bg-danger"
+                    } rounded-pill">
+                    ${item.estadoProducto ? "Activo" : "Inactivo"}
                 </span>`;
 
                 // Celda de acciones
                 let accionesCell = fila.insertCell();
-                
+
                 // Botón Editar
                 let linkUpdate = document.createElement("a");
                 linkUpdate.href = `../pages/formproductos.html?Mode=UPD&id=${item._id}`;
-                linkUpdate.innerHTML = '<i class="fas fa-edit btn btn-warning btn-sm me-2"></i>';
+                linkUpdate.innerHTML =
+                    '<i class="fas fa-edit btn btn-warning btn-sm me-2"></i>';
                 accionesCell.appendChild(linkUpdate);
 
                 // Botón Eliminar
                 let linkDelete = document.createElement("a");
                 linkDelete.href = `../pages/formproductos.html?Mode=DLT&id=${item._id}`;
-                linkDelete.innerHTML = '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
+                linkDelete.innerHTML =
+                    '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
                 accionesCell.appendChild(linkDelete);
             });
 
             mostrarPaginacion(data.paginaActual, data.totalPaginas);
         })
-        .catch(function (error) {
+        .catch(error => {
             console.error("Error:", error);
+            const tableBody = document.querySelector("#miTabla tbody");
+            tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-danger">
+                    Error al cargar los usuarios. Por favor, intente nuevamente.
+                </td>
+            </tr>
+        `;
         });
 }
 
@@ -116,8 +130,9 @@ function generarBotonesPagina(paginaActual, totalPaginas) {
 // Obtener los productos
 fetchProductos(currentPage);
 
-
-document.body.insertAdjacentHTML('beforeend', `
+document.body.insertAdjacentHTML(
+    "beforeend",
+    `
     <div class="modal fade" id="imagenModal" tabindex="-1" aria-labelledby="imagenModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -131,17 +146,18 @@ document.body.insertAdjacentHTML('beforeend', `
             </div>
         </div>
     </div>
-`);
+`
+);
 
 function mostrarImagenAmpliada(src, alt) {
-    const modal = new bootstrap.Modal(document.getElementById('imagenModal'));
-    const imagenAmpliada = document.getElementById('imagenAmpliada');
-    const modalTitle = document.getElementById('imagenModalLabel');
-    
+    const modal = new bootstrap.Modal(document.getElementById("imagenModal"));
+    const imagenAmpliada = document.getElementById("imagenAmpliada");
+    const modalTitle = document.getElementById("imagenModalLabel");
+
     imagenAmpliada.src = src;
     imagenAmpliada.alt = alt;
     modalTitle.textContent = alt;
-    
+
     modal.show();
 }
 

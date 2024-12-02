@@ -153,11 +153,6 @@ form.addEventListener('submit', (e) => {
     });
 });
 
-// Inicialización al cargar el documento
-document.addEventListener('DOMContentLoaded', () => {
-    cargarDatosProducto();
-});
-
 // titulo segun el modo
 document.addEventListener('DOMContentLoaded', () => {
     const titulo = document.querySelector('.card-title');

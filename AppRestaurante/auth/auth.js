@@ -10,72 +10,49 @@ const SECRET_KEY = 'TareaProyectoIIParcial';
 
 // controlador para el registro de usuarios
 exports.signUp = async (req, res) => {
-    try{
-        const pNombre = req.body.nombre;
-        const pEmail = req.body.email;
-        const pPassword = req.body.password;
-        const pRol = req.body.nRol;
+    try {
+        const { nombre, email, password, nRol } = req.body;
 
-        if(!pNombre){
-            return res.status(400).send("El nombre es obligatorio");
-        }
-        if(!pEmail){
-            return res.status(400).send("El email es obligatorio");
-        }
-        if(!pPassword){
-            return res.status(400).send("El password es obligatorio");
+        // Validaciones
+        if (!nombre || !email || !password || !nRol) {
+            return res.status(400).json({ error: 'Todos los campos son requeridos' });
         }
 
-        // expresiones regulares para validar el email
-        let validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-        if (!validEmail.test(pEmail)) {
-            res.status(400).send("El email no es valido");
-            return;
+        // Verificar si el usuario ya existe
+        const existeUsuario = await User.findOne({ email });
+        if (existeUsuario) {
+            return res.status(400).json({ error: 'El email ya está registrado' });
         }
 
-        // validar que el email no exista en la base de datos
-        const userVerify = await User.findOne({email: pEmail});
-        if(userVerify){
-            return res.status(400).send("El email ya existe");
+        // Verificar que el rol existe
+        const rolExiste = await Rols.findById(nRol);
+        if (!rolExiste) {
+            return res.status(400).json({ error: 'El rol especificado no existe' });
         }
 
-        let rolAsignado;
-        if (pRol) {
-            rolAsignado = await Rols.findOne({ nombre: pRol });
-            if (!rolAsignado) {
-                return res.status(400).send("El rol especificado no existe");
+        // Crear el usuario con el ID del rol
+        const usuario = new User({
+            nombre,
+            email,
+            password,
+            nRol: [nRol] // Usar directamente el ID del rol
+        });
+
+        await usuario.save();
+
+        res.status(201).json({
+            mensaje: 'Usuario creado exitosamente',
+            usuario: {
+                id: usuario._id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                rol: rolExiste.nombre
             }
-        } else {
-            rolAsignado = await Rols.findOne({ nombre: "user" });
-        }
-
-        // crear el usuario
-        const user = new User({
-            nombre: pNombre,
-            email: pEmail,
-            password: pPassword,
-            nRol: [rolAsignado._id]
         });
 
-        const saveUser = await user.save();
-
-        const payload = {
-            id: saveUser.id,
-            nombre: saveUser.nombre,
-            email: saveUser.email,
-            nRol: saveUser.nRol
-        };
-
-        // crear el token
-        const token = jwt.sign(payload, SECRET_KEY, {
-            expiresIn: 86400 // 24 horas
-        });
-
-        res.status(201).send({saveUser, token, rolAsignado: rolAsignado.nombre});
-
-    }catch(error){
-        console.log("Error en signUp: ", error);
-        res.status(500).send("Hubo un error en el servidor");
+    } catch (error) {
+        console.error('Error en signUp:', error);
+        res.status(500).json({ error: 'Error al crear el usuario' });
     }
 };
 

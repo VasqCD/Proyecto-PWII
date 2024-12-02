@@ -1,4 +1,3 @@
-
 let currentPage = 1;
 const limit = 10;
 
@@ -16,7 +15,7 @@ function fetchCategorias(page) {
         const tableBody = document.querySelector("#miTabla tbody");
         tableBody.innerHTML = "";
 
-        data.forEach(item => {
+        data.categorias.forEach(item => {
             const fila = tableBody.insertRow();
             
             fila.insertCell().textContent = item._id;
@@ -41,8 +40,57 @@ function fetchCategorias(page) {
             linkDelete.innerHTML = '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
             accionesCell.appendChild(linkDelete);
         });
+
+        mostrarPaginacion(data.paginaActual, data.totalPaginas);
     })
     .catch(error => console.error("Error:", error));
+}
+
+function generarBotonesPagina(paginaActual, totalPaginas) {
+    let botones = "";
+    const MAX_PAGINAS = 5;
+
+    let inicio = Math.max(1, paginaActual - Math.floor(MAX_PAGINAS / 2));
+    let fin = Math.min(totalPaginas, inicio + MAX_PAGINAS - 1);
+
+    if (fin - inicio + 1 < MAX_PAGINAS) {
+        inicio = Math.max(1, fin - MAX_PAGINAS + 1);
+    }
+
+    if (inicio > 1) {
+        botones += `<li class="page-item">
+            <a class="page-link" href="#" onclick="fetchCategorias(1); return false;">1...</a>
+        </li>`;
+    }
+
+    for (let i = inicio; i <= fin; i++) {
+        botones += `
+            <li class="page-item ${i === paginaActual ? "active" : ""}">
+                <a class="page-link" href="#" onclick="fetchCategorias(${i}); return false;">${i}</a>
+            </li>
+        `;
+    }
+
+    if (fin < totalPaginas) {
+        botones += `<li class="page-item">
+            <a class="page-link" href="#" onclick="fetchCategorias(${totalPaginas}); return false;">...${totalPaginas}</a>
+        </li>`;
+    }
+
+    return botones;
+}
+
+function mostrarPaginacion(paginaActual, totalPaginas) {
+    const paginacion = document.querySelector("#pagination");
+    paginacion.innerHTML = `
+        <li class="page-item ${paginaActual === 1 ? "disabled" : ""}">
+            <a class="page-link" href="#" onclick="fetchCategorias(${paginaActual - 1}); return false;">Anterior</a>
+        </li>
+        ${generarBotonesPagina(paginaActual, totalPaginas)}
+        <li class="page-item ${paginaActual === totalPaginas ? "disabled" : ""}">
+            <a class="page-link" href="#" onclick="fetchCategorias(${paginaActual + 1}); return false;">Siguiente</a>
+        </li>
+    `;
 }
 
 // Inicializar

@@ -7,7 +7,10 @@ const path = require('path');
 const ProductosRoute = require('./routes/ProductosRoute');
 const BebidasRoute = require('./routes/BebidasRoute');
 const CategoriasRoute = require('./routes/CategoriasRoute');
+const UserRoute = require('./routes/UsersRoute');
 const AuthRoute = require('./routes/AuthRoute');
+const User = require('./models/user');
+const RolesRoute = require('./routes/RolesRoute');
 
 const app = express();
 
@@ -24,7 +27,9 @@ initRoles();
 ProductosRoute(app);
 BebidasRoute(app);
 CategoriasRoute(app);
+UserRoute(app);
 AuthRoute(app);
+RolesRoute(app);
 
 app.listen(3001, () => {
     console.log('Servidor corriendo en el puerto 3001');

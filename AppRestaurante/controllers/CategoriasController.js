@@ -42,10 +42,29 @@ exports.crearCategoria = async (req, res) => {
 
 // servicio para obtener todas las categorias
 exports.obtenerCategorias = async (req, res) => {
-    try{
-        const categorias = await Categoria.find();
-        res.status(200).send(categorias);
-    }catch(error){
+    try {
+        const pagina = parseInt(req.query.pagina) || 1;
+        const limite = parseInt(req.query.limite) || 10;
+        
+        const skip = (pagina - 1) * limite;
+
+        const [categorias, total] = await Promise.all([
+            Categoria.find()
+                .skip(skip)
+                .limit(limite),
+            Categoria.countDocuments()
+        ]);
+
+        const totalPaginas = Math.ceil(total / limite);
+
+        res.status(200).json({
+            categorias,
+            paginaActual: pagina,
+            totalPaginas,
+            totalRegistros: total
+        });
+
+    } catch (error) {
         console.log("Error en obtenerCategorias: ", error);
         res.status(500).send("Hubo un error en el servidor");
     }

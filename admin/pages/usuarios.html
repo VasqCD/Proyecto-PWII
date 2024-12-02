@@ -1,38 +1,39 @@
+<!-- usuarios.html -->
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Panel - Productos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="../assets/css/sidebar.css" />
-    <link rel="stylesheet" href="../assets/css/global.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Usuarios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="../assets/css/sidebar.css" rel="stylesheet">
+    <link href="../assets/css/global.css" rel="stylesheet">
 </head>
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Panel - Productos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/sidebar.css" />
-    <link rel="stylesheet" href="../assets/css/global.css" />
-</head>
-
 <body>
     <div class="d-flex">
+        <!-- Sidebar -->
         <aside class="bg-primary-gray text-white d-flex flex-column p-3" id="sidebar">
             <div class="text-center mb-4">
                 <img src="../assets/images/logo.png" alt="Logo" class="rounded-circle" width="100" />
                 <h4 class="mt-2">Restaurante Mi Sabor</h4>
             </div>
-            <nav class="nav flex-column flex-grow-1 justify-content-center">
-                <a class="nav-link text-white text-start" href="../home.html"><i class="fas fa-home"></i> Inicio</a>
-                <a class="nav-link text-white text-start" href="productos.html"><i class="fas fa-utensils"></i> Productos</a>
-                <a class="nav-link text-white text-start" href="bebidas.html"><i class="fas fa-glass-martini-alt"></i> Bebidas</a>
-                <a class="nav-link text-white text-start" href="categorias.html"><i class="fas fa-list"></i> Categorías</a>
-                <a class="nav-link text-white text-start active" href="usuarios.html"><i class="fas fa-users"></i> Usuarios</a>
+            <nav class="nav flex-column flex-grow-1 justify-content-center" aria-label="Menú principal">
+                <a class="nav-link text-white text-start" href="../home.html">
+                    <i class="fas fa-home"></i> Inicio
+                </a>
+                <a class="nav-link text-white text-start" href="productos.html">
+                    <i class="fas fa-utensils"></i> Productos
+                </a>
+                <a class="nav-link text-white text-start" href="bebidas.html">
+                    <i class="fas fa-glass-martini-alt"></i> Bebidas
+                </a>
+                <a class="nav-link text-white text-start" href="categorias.html">
+                    <i class="fas fa-list"></i> Categorías
+                </a>
+                <a class="nav-link text-white text-start active" href="usuarios.html">
+                    <i class="fas fa-users"></i> Usuarios
+                </a>
             </nav>
             <div class="text-center mt-auto">
                 <div class="mb-2">
@@ -44,38 +45,41 @@
                 </button>
             </div>
         </aside>
+
+        <!-- Contenido principal -->
+        <main class="flex-grow-1 p-3 custom-main">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Gestión de Usuarios</h1>
+                <a href="formusuarios.html" class="btn btn-primary-orange">
+                    <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="miTabla" class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Paginación">
+                        <ul id="pagination" class="pagination justify-content-center"></ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
     </div>
-    <main class="flex-grow-1 p-3 custom-main">
-        <!-- Agregar titulo de la página-->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Gestiona tus productos</h1>
-            <button class="btn btn-primary-orange">Nuevo Producto</button>
-        </div>
-
-        <!-- Agregar línea con estilo-->
-        <hr class="my-4" />
-
-        <!-- Agregar tabla de productos-->
-        <div class="table-responsive">
-            <table class="table table-custom">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí irán las filas de productos -->
-                </tbody>
-            </table>
-        </div>
-    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/custom.js"></script>
+    <script src="../assets/js/usuarios.js"></script>
 </body>
-
 </html>
