@@ -54,10 +54,10 @@ function renderizarBebidas(bebidas) {
                     <img src="http://localhost:3001${bebida.imagenBebida}" 
                          alt="${bebida.nombreBebida}" 
                          class="custom-img">
-                    <div class="custom-body">
-                        <h5 class="custom-title">${bebida.nombreBebida}</h5>
-                        <p class="custom-text">${bebida.descripcionBebida}</p>
-                        <span class="custom-price">L. ${bebida.precioBebida}</span>
+                    <div class="custom-body text-center">
+                        <h5 class="custom-title text-dark fw-bold">${bebida.nombreBebida}</h5>
+                        <p class="custom-text text-dark">${bebida.descripcionBebida}</p>
+                        <span class="custom-price text-dark">L. ${bebida.precioBebida}</span>
                     </div>
                 </div>
             </div>

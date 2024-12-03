@@ -11,6 +11,15 @@ function toggleForms() {
     loginMessage.style.display = loginMessage.style.display === 'none' ? 'block' : 'none';
     registerMessage.style.display = registerMessage.style.display === 'none' ? 'block' : 'none';
 }
+document.addEventListener('DOMContentLoaded', function() {
+    const token = localStorage.getItem('token');
+    
+    // Si ya hay un token, redirigir al dashboard
+    if (token && window.location.pathname.includes('login.html')) {
+        window.location.href = '/admin/index.html';
+        return;
+    }
+});
 
 // servicio de login 
 const form = document.querySelector('#loginFormSubmit');
@@ -38,7 +47,7 @@ form.addEventListener('submit', e => {
         })
         .then(data => {
             localStorage.setItem('token', data.token);
-            window.location.href = '/admin/home.html';
+            window.location.href = '/admin/index.html';
         })
 
         .catch(function (error) {
@@ -78,7 +87,7 @@ formRegister.addEventListener('submit', e => {
         })
         .then(data => {
             localStorage.setItem('token', data.token);
-            window.location.href = '/admin/home.html';
+            window.location.href = '/admin/index.html';
         })
 
         .catch(function (error) {

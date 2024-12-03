@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
-    const isHomePage = path.endsWith('home.html') || path.endsWith('admin/');
+    const isHomePage = path.endsWith('index.html') || path.endsWith('admin/');
     const sidebarPath = isHomePage ? './components/sidebar.html' : '../components/sidebar.html';
     
     fetch(sidebarPath)

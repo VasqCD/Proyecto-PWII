@@ -1,3 +1,4 @@
+// Modificar loadComponents.js
 document.addEventListener('DOMContentLoaded', function () {
     // Cargar el menú
     fetch('/components/menu.html')
@@ -13,6 +14,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     link.classList.add('active');
                 }
             });
+
+            // Verificar autenticación y mostrar botones correspondientes
+            const token = localStorage.getItem('token');
+            const btnRegister = document.querySelector('.btn-auth.register');
+            const btnDashboard = document.querySelector('.btn-auth.dashboard');
+
+            if (token) {
+                btnRegister.classList.add('d-none');
+                btnDashboard.classList.remove('d-none');
+                // Actualizar href del botón dashboard
+                btnDashboard.href = '/admin/index.html';
+            } else {
+                btnRegister.classList.remove('d-none');
+                btnDashboard.classList.add('d-none');
+            }
         });
 
     // Cargar el footer
