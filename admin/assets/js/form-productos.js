@@ -26,10 +26,14 @@ function cargarCategorias(callback) {
             'Authorization': `Bearer ${token}`
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Error al obtener categorías');
+        return response.json();
+    })
     .then(data => {
+        // Corrección: data.categorias en lugar de data directamente
         categoryInput.innerHTML = '<option value="">Seleccione una categoría</option>';
-        data.forEach(categoria => {
+        data.categorias.forEach(categoria => {
             if (categoria.tipoCategoria === 'PRODUCTOS') {
                 const option = document.createElement('option');
                 option.value = categoria._id;
@@ -41,9 +45,11 @@ function cargarCategorias(callback) {
             callback();
         }
     })
-    .catch(error => mostrarError('Error al cargar categorías'));
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarError('Error al cargar categorías. Por favor, intente nuevamente.');
+    });
 }
-
 // Función para cargar datos del producto
 function cargarDatosProducto() {
     if (mode === 'UPD' || mode === 'DLT') {

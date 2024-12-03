@@ -68,19 +68,25 @@ body {
 }
 
 
+/* Reemplazar el estilo actual de .btn-estilo con: */
 .btn-estilo {
-  background-color: #e5533d;
-  color: white;
-  padding: 10px 20px;
+  padding: 0.75rem 1.5rem;
   border: none;
+  border-radius: 25px;
+  background-color: #2c3e50;
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
   cursor: pointer;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
 }
 
 .btn-estilo:hover {
-  background-color: #0056b3;
+  background-color: #34495e;
+  transform: translateY(-2px);
+}
+
+.btn-spacing {
+  margin: 0.5rem;
 }
 
 /* Estilo del carrusel */

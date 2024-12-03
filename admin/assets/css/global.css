@@ -110,3 +110,13 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+.btn-accion.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-accion.disabled:hover {
+    background: none;
+    transform: none;
+}

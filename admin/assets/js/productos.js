@@ -50,15 +50,18 @@ function fetchProductos(page) {
                 // Botón Editar
                 let linkUpdate = document.createElement("a");
                 linkUpdate.href = `../pages/formproductos.html?Mode=UPD&id=${item._id}`;
-                linkUpdate.innerHTML =
-                    '<i class="fas fa-edit btn btn-warning btn-sm me-2"></i>';
-                accionesCell.appendChild(linkUpdate);
+                linkUpdate.classList.add('btn-accion');
+                linkUpdate.innerHTML = '<i class="fas fa-edit btn btn-warning btn-sm me-2"></i>';
+                linkUpdate.title = 'Editar producto';
 
                 // Botón Eliminar
                 let linkDelete = document.createElement("a");
                 linkDelete.href = `../pages/formproductos.html?Mode=DLT&id=${item._id}`;
-                linkDelete.innerHTML =
-                    '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
+                linkDelete.classList.add('btn-accion');
+                linkDelete.innerHTML = '<i class="fas fa-trash-alt btn btn-danger btn-sm"></i>';
+                linkDelete.title = 'Eliminar producto';
+
+                accionesCell.appendChild(linkUpdate);
                 accionesCell.appendChild(linkDelete);
             });
 

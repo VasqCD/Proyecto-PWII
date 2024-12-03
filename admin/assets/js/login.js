@@ -14,10 +14,9 @@ function toggleForms() {
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     
-    // Si ya hay un token, redirigir al dashboard
+
     if (token && window.location.pathname.includes('login.html')) {
         window.location.href = '/admin/index.html';
-        return;
     }
 });
 
@@ -39,60 +38,69 @@ form.addEventListener('submit', e => {
         },
         body: JSON.stringify({ email, password })
     })
-        .then(response => {
-            if (!response.ok) {
-                throw Error('La resouewsta no fue correcta');
-            }
-            return response.json();
-        })
-        .then(data => {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/admin/index.html';
-        })
-
-        .catch(function (error) {
-            console.log(error);
-            contenedorError.textContent = 'Error al iniciar sesión usuario o contraseña incorrectos';
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw Error('La respuesta no fue correcta');
+        }
+        return response.json();
+    })
+    .then(data => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('userName', data.user.nombre);
+        localStorage.setItem('userRoles', JSON.stringify(data.user.roles));
+        window.location.href = '/admin/index.html';
+    })
+    .catch(function (error) {
+        console.log(error);
+        contenedorError.textContent = 'Error al iniciar sesión usuario o contraseña incorrectos';
+    });
 
 });
 
 // servicio de registro
 const formRegister = document.querySelector('#registerFormSubmit');
-const nombreInput = document.querySelector('#registerName');
+const nombreInput = document.querySelector('#registerNombre'); // Corregido el ID
 const emailRegisterInput = document.querySelector('#registerEmail');
 const passwordRegisterInput = document.querySelector('#registerPassword');
-const rolInput = document.querySelector('#registerRol');
 const contenedorErrorRegister = document.querySelector('#contenedor-error-register');
 
-formRegister.addEventListener('submit', e => {
+formRegister.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Limpiar mensaje de error previo
+    contenedorErrorRegister.innerHTML = '';
+    
     const nombre = nombreInput.value;
     const email = emailRegisterInput.value;
     const password = passwordRegisterInput.value;
-    const nRol = rolInput.value;
 
-    fetch('http://localhost:3001/signup', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nombre, email, password, nRol })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw Error('La resouewsta no fue correcta');
-            }
-            return response.json();
-        })
-        .then(data => {
-            localStorage.setItem('token', data.token);
-            window.location.href = '/admin/index.html';
-        })
+    try {
+        const response = await fetch('http://localhost:3001/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nombre, email, password })
+        });
 
-        .catch(function (error) {
-            console.log(error);
-            contenedorErrorRegister.textContent = 'Error al registrar usuario';
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Error al registrar usuario');
         }
-        );
+
+        // Si el registro es exitoso
+        localStorage.setItem('token', data.token);
+        alert('Usuario registrado exitosamente');
+        window.location.href = '/admin/index.html';
+
+    } catch (error) {
+        console.error('Error:', error);
+        contenedorErrorRegister.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                ${error.message}
+            </div>
+        `;
+    }
 });

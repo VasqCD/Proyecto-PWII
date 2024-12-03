@@ -11,10 +11,10 @@ const SECRET_KEY = 'TareaProyectoIIParcial';
 // controlador para el registro de usuarios
 exports.signUp = async (req, res) => {
     try {
-        const { nombre, email, password, nRol } = req.body;
+        const { nombre, email, password } = req.body;
 
-        // Validaciones
-        if (!nombre || !email || !password || !nRol) {
+        // Validaciones básicas
+        if (!nombre || !email || !password) {
             return res.status(400).json({ error: 'Todos los campos son requeridos' });
         }
 
@@ -24,21 +24,29 @@ exports.signUp = async (req, res) => {
             return res.status(400).json({ error: 'El email ya está registrado' });
         }
 
-        // Verificar que el rol existe
-        const rolExiste = await Rols.findById(nRol);
-        if (!rolExiste) {
-            return res.status(400).json({ error: 'El rol especificado no existe' });
+        // Buscar el rol "user" por defecto
+        const rolUsuario = await Rols.findOne({ nombre: 'user' });
+        if (!rolUsuario) {
+            return res.status(400).json({ error: 'Error en la configuración de roles' });
         }
 
-        // Crear el usuario con el ID del rol
+        // Crear el usuario con el rol por defecto
         const usuario = new User({
             nombre,
             email,
             password,
-            nRol: [nRol] // Usar directamente el ID del rol
+            nRol: [rolUsuario._id]
         });
 
         await usuario.save();
+
+        // Generar token
+        const token = jwt.sign({
+            id: usuario._id,
+            nombre: usuario.nombre,
+            email: usuario.email,
+            nRol: usuario.nRol
+        }, SECRET_KEY, { expiresIn: 86400 });
 
         res.status(201).json({
             mensaje: 'Usuario creado exitosamente',
@@ -46,8 +54,9 @@ exports.signUp = async (req, res) => {
                 id: usuario._id,
                 nombre: usuario.nombre,
                 email: usuario.email,
-                rol: rolExiste.nombre
-            }
+                rol: rolUsuario.nombre
+            },
+            token
         });
 
     } catch (error) {
@@ -58,11 +67,11 @@ exports.signUp = async (req, res) => {
 
 // controlador para el login
 exports.signIn = async (req, res) => {
-    try{
+    try {
         const pEmail = req.body.email;
         const pPassword = req.body.password;
 
-        const user = await User.findOne({email: req.body.email});
+        const user = await User.findOne({email: req.body.email}).populate('nRol', 'nombre');
         if(!user || user == null){
             res.status(400).send("El correo o la contraseña son incorrectos");
             return;
@@ -78,16 +87,23 @@ exports.signIn = async (req, res) => {
             id: user.id,
             nombre: user.nombre,
             email: user.email,
-            nRol: user.nRol
+            nRol: user.nRol.map(rol => rol.nombre)
         };
 
         const token = jwt.sign(payload, SECRET_KEY, {
-            expiresIn: 86400 // 24 horas
+            expiresIn: 86400
         });
 
-        res.status(200).send({user, token});
-
-    }catch(error){
+        res.status(200).json({
+            user: {
+                id: user.id,
+                nombre: user.nombre,
+                email: user.email,
+                roles: user.nRol.map(rol => rol.nombre)
+            }, 
+            token
+        });
+    } catch(error) {
         console.log("Error en lognIn: ", error);
         res.status(500).send("Hubo un error en el servidor");
     }

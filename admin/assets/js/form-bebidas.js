@@ -18,27 +18,46 @@ const imageInput = document.querySelector('#image');
 const contenedorError = document.querySelector('#contenedor-error');
 
 function cargarCategorias(callback) {
-    fetch('http://localhost:3001/categorias', {
+    // Primero obtener el total de páginas
+    fetch('http://localhost:3001/categorias?limite=100', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Error al obtener categorías');
+        return response.json();
+    })
     .then(data => {
+        console.log('Categorías recibidas:', data);
         categoryInput.innerHTML = '<option value="">Seleccione una categoría</option>';
-        data.forEach(categoria => {
-            if (categoria.tipoCategoria === 'BEBIDAS') {
-                const option = document.createElement('option');
-                option.value = categoria._id;
-                option.textContent = categoria.nombreCategoria;
-                categoryInput.appendChild(option);
-            }
+        
+        // Filtrar categorías de bebidas
+        const categoriasBebidas = data.categorias.filter(categoria => 
+            categoria.tipoCategoria && 
+            categoria.tipoCategoria.toUpperCase() === 'BEBIDAS'
+        );
+
+        console.log('Categorías de bebidas encontradas:', categoriasBebidas);
+
+        categoriasBebidas.forEach(categoria => {
+            const option = document.createElement('option');
+            option.value = categoria._id;
+            option.textContent = categoria.nombreCategoria;
+            categoryInput.appendChild(option);
         });
+
+        console.log('Total opciones generadas:', 
+            categoryInput.querySelectorAll('option').length - 1);
+
         if (typeof callback === 'function') {
             callback();
         }
     })
-    .catch(error => mostrarError('Error al cargar categorías'));
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarError('Error al cargar categorías. Por favor, intente nuevamente.');
+    });
 }
 
 function cargarDatosBebida() {
@@ -125,15 +144,24 @@ form.addEventListener('submit', (e) => {
     fetch(url, {
         method: metodo,
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}` 
         },
-        body: formData
+        body: formData 
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Error al procesar la operación');
+    .then(async response => {
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || 'Error al procesar la operación');
+        }
+        return response.json();
+    })
+    .then(data => {
         window.location.href = '../pages/bebidas.html';
     })
-    .catch(error => mostrarError(error.message));
+    .catch(error => {
+        console.error('Error:', error);
+        mostrarError(error.message || 'Error al procesar la operación');
+    });
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -144,6 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
         titulo.innerHTML = '<i class="fas fa-trash-alt me-2"></i>Eliminar Bebida';
     } else {
         titulo.innerHTML = '<i class="fas fa-glass-martini-alt me-2"></i>Nueva Bebida';
+    }
+    if (!tienePermiso('crear') && !tienePermiso('editar')) {
+        window.location.href = '/admin/index.html';
+        return;
     }
     
     cargarDatosBebida();

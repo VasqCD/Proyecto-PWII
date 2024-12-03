@@ -13,12 +13,52 @@ exports.crearBebida = async (req, res) => {
         });
 
         form.parse(req, async (err, fields, files) => {
-            // ... validaciones existentes ...
+            if (err) {
+                return res.status(500).json({ error: 'Error al procesar el formulario' });
+            }
 
-            // Manejar imagen y crear bebida como antes...
+            // Validaciones básicas
+            if (!fields.nombreBebida?.[0]) {
+                return res.status(400).json({ error: 'El nombre de la bebida es requerido' });
+            }
+            if (!fields.descripcionBebida?.[0]) {
+                return res.status(400).json({ error: 'La descripción de la bebida es requerida' });
+            }
+            if (!fields.precioBebida?.[0]) {
+                return res.status(400).json({ error: 'El precio de la bebida es requerido' });
+            }
+            if (!fields.categoriaBebida?.[0]) {
+                return res.status(400).json({ error: 'La categoría de la bebida es requerida' });
+            }
+            if (!files.imagen) {
+                return res.status(400).json({ error: 'La imagen de la bebida es requerida' });
+            }
+
+            // Manejar la imagen
+            let imagenUrl = '';
+            const file = files.imagen[0];
+            const dirPath = path.join(__dirname, '../assets/uploads');
+            if (!fs.existsSync(dirPath)) {
+                fs.mkdirSync(dirPath, { recursive: true });
+            }
+
+            const fileName = `bebida_${Date.now()}${path.extname(file.originalFilename || '')}`;
+            const newPath = path.join(dirPath, fileName);
+            fs.renameSync(file.filepath, newPath);
+            imagenUrl = `/assets/uploads/${fileName}`;
+
+            // Crear bebida
+            const bebida = new Bebida({
+                nombreBebida: fields.nombreBebida[0],
+                descripcionBebida: fields.descripcionBebida[0],
+                precioBebida: fields.precioBebida[0],
+                categoriaBebida: fields.categoriaBebida[0],
+                estadoBebida: fields.estadoBebida[0] === 'true',
+                imagenBebida: imagenUrl
+            });
+
             const bebidaGuardada = await bebida.save();
             
-            // Agregar populate al resultado
             const bebidaConCategoria = await Bebida.findById(bebidaGuardada._id)
                 .populate('categoriaBebida', 'nombreCategoria');
 
