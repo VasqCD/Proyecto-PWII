@@ -1,0 +1,90 @@
+/* Estilos para el menú */
+.navbar {
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand-container {
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+}
+
+.nav-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.navbar-nav {
+    gap: 1rem;
+}
+
+.nav-link {
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+.nav-link.active {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.btn-auth {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Responsividad */
+@media (max-width: 991px) {
+    .navbar-nav {
+        text-align: center;
+        padding: 1rem 0;
+    }
+
+    .auth-buttons {
+        text-align: center;
+        margin-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    .navbar-brand-container {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .btn-auth {
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+}
