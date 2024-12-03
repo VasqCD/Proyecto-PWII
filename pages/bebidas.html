@@ -17,95 +17,17 @@
     <section class="custom-section margin-top">
         <div class="container">
             <h2 class="custom-title text-center">Nuestras Bebidas</h2>
-            <div class="custom-row">
-                
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/tequila.avif" alt="Tequila" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Tequila</h5>
-                            <p class="custom-text">Auténtico tequila mexicano, ideal para acompañar tus comidas.</p>
-                            <span class="custom-price">L. 150</span>
-                        </div>
-                    </div>
+            
+            <!-- Filtros de Bebidas -->
+            <div class="container my-4">
+                <h3 class="text-center">Filtrar por categoria</h3>
+                <div class="d-flex justify-content-center" id="categorias-container">
+                    <!-- Las categorías se cargarán dinámicamente aquí -->
                 </div>
+            </div>
     
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/margarita.webp" alt="Margarita" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Margarita</h5>
-                            <p class="custom-text">Cóctel refrescante a base de tequila, triple sec y jugo de limón.</p>
-                            <span class="custom-price">L. 200</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/pinacolada.jpg" alt="Piña Colada" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Piña Colada</h5>
-                            <p class="custom-text">Delicioso cóctel a base de piña, coco y ron.</p>
-                            <span class="custom-price">L. 180</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/chicamorada.webp" alt="Chicha Morada" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Chicha Morada</h5>
-                            <p class="custom-text">Bebida refrescante de maíz morado, ideal para acompañar cualquier comida.</p>
-                            <span class="custom-price">L. 100</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/limonada.jpg" alt="Limonada" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Limonada</h5>
-                            <p class="custom-text">Limonada natural, refrescante y perfecta para un día caluroso.</p>
-                            <span class="custom-price">L. 80</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/cafeleche.jpg" alt="Café con Leche" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Café con Leche</h5>
-                            <p class="custom-text">Delicioso café hondureño con un toque de leche espumada.</p>
-                            <span class="custom-price">L. 50</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/vinotinto.webp" alt="Vino Tinto" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Vino Tinto</h5>
-                            <p class="custom-text">Fino vino tinto para acompañar tus platos principales.</p>
-                            <span class="custom-price">L. 250</span>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="custom-col">
-                    <div class="custom-card">
-                        <img src="../assets/images/bebidas/orchata.avif" alt="Horchata" class="custom-img">
-                        <div class="custom-body">
-                            <h5 class="custom-title">Horchata</h5>
-                            <p class="custom-text">Tradicional bebida a base de arroz y especias, refrescante y deliciosa.</p>
-                            <span class="custom-price">L. 70</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="custom-row" id="bebidas-container">
+                <!-- Las cards de bebidas se cargarán dinámicamente aquí -->
             </div>
         </div>
     </section>
@@ -182,5 +104,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/assets/js/loadComponents.js"></script>
+    <script src="../assets/js/bebidas-cliente.js"></script>
 </body>
 </html>

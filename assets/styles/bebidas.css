@@ -113,9 +113,16 @@
     color: #007bff;
 }
 
-.table-custom {
-    border-spacing: 0;
-    border-radius: 8px;
-    overflow: hidden;
+
+
+
+
+.bebidas-calientes,
+.bebidas-frias,
+.bebidas-alcoholicas {
+    opacity: 1;
 }
 
+.custom-card.filtered-out {
+    display: none;
+}
